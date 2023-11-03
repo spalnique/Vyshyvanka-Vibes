@@ -73,6 +73,44 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
+// const collectionItems = document.querySelectorAll('.collection-item');
+// const lightboxContainer = document.getElementById('lightbox-container');
+// const lightboxImage = document.getElementById('lightbox-image');
+// const lightboxClose = document.getElementById('lightbox-close');
+
+// collectionItems.forEach((item, index) => {
+//   const img = item.querySelector('.collection-img');
+//   //   const newSrc = img.src.slice(0, -6) + '3x.jpg';
+//   const newSrc = img.src
+//     .replace(/img\/desk1440\/Collection/g, 'assets')
+//     .replace(/px1x/g, 'px3x');
+//   const newWidth = img.width * 1.5;
+//   const newHeight = img.height * 1.5;
+
+//   img.addEventListener('click', () => {
+//     lightboxImage.src = newSrc;
+//     lightboxImage.alt = img.alt;
+//     lightboxImage.width = newWidth;
+//     lightboxImage.height = newHeight;
+//     lightboxContainer.style.pointerEvents = 'auto';
+//     lightboxContainer.style.visibility = 'visible';
+//     lightboxContainer.style.opacity = '1';
+//   });
+// });
+
+// function closeLightbox() {
+//   lightboxContainer.style.pointerEvents = 'none';
+//   lightboxContainer.style.visibility = 'hidden';
+//   lightboxContainer.style.opacity = '0';
+// }
+
+// lightboxClose.addEventListener('click', closeLightbox);
+// lightboxContainer.addEventListener('click', event => {
+//   if (event.target === lightboxContainer) {
+//     closeLightbox();
+//   }
+// });
+
 const collectionItems = document.querySelectorAll('.collection-item');
 const lightboxContainer = document.getElementById('lightbox-container');
 const lightboxImage = document.getElementById('lightbox-image');
@@ -80,10 +118,22 @@ const lightboxClose = document.getElementById('lightbox-close');
 
 collectionItems.forEach((item, index) => {
   const img = item.querySelector('.collection-img');
-  //   const newSrc = img.src.slice(0, -6) + '3x.jpg';
-  const newSrc = img.src
-    .replace(/img\/desk1440\/Collection/g, 'assets')
-    .replace(/px1x/g, 'px3x');
+  const sources = item.querySelectorAll('source');
+  const baseImageUrl = `${window.location.origin}/assets/`;
+
+  // Find the source with the desired media condition
+  let selectedSource = null;
+  for (const source of sources) {
+    if (source.media === '(min-width: 1440px)') {
+      selectedSource = source;
+      break;
+    }
+  }
+
+  // Construct the new image source
+  const newSrc = baseImageUrl + selectedSource.srcset.split(' ')[0];
+  console.log('newSrc = ', newSrc);
+
   const newWidth = img.width * 1.5;
   const newHeight = img.height * 1.5;
 
